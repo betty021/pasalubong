@@ -7,6 +7,7 @@ export default function Register() {
   const [f, setF] = useState({ first_name: '', last_name: '', email: '', password: '', password_confirmation: '' });
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [show, setShow] = useState(false);   // ipakita/itago ang password at confirm password
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
 
   async function submit(e) {
@@ -27,8 +28,17 @@ export default function Register() {
       </div>
       <div className="field"><label>Gmail address</label><input type="email" required value={f.email} onChange={set('email')} placeholder="yourname@gmail.com" autoComplete="email" pattern="[A-Za-z0-9.]+@(gmail|googlemail)\.com" title="Please use a Gmail address (yourname@gmail.com)" /></div>
       <div className="two">
-        <div className="field"><label>Password</label><input type="password" required minLength={8} value={f.password} onChange={set('password')} /></div>
-        <div className="field"><label>Confirm password</label><input type="password" required minLength={8} value={f.password_confirmation} onChange={set('password_confirmation')} /></div>
+        <div className="field"><label>Password</label>
+          <div style={{ position: 'relative' }}>
+            <input type={show ? 'text' : 'password'} required minLength={8} value={f.password} onChange={set('password')} autoComplete="new-password" style={{ paddingRight: 44 }} />
+            <button type="button" onClick={() => setShow((s) => !s)} aria-label={show ? 'Hide password' : 'Show password'} title={show ? 'Hide password' : 'Show password'}
+            style={{ position: 'absolute', right: 6, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 0, cursor: 'pointer', padding: '6px 8px', color: 'inherit' }}>
+            <i className={`fa-solid ${show ? 'fa-eye-slash' : 'fa-eye'}`} aria-hidden="true" /></button>
+          </div>
+        </div>
+        <div className="field"><label>Confirm password</label>
+          <input type={show ? 'text' : 'password'} required minLength={8} value={f.password_confirmation} onChange={set('password_confirmation')} autoComplete="new-password" />
+        </div>
       </div>
       {error && <div className="err" role="alert">{error}</div>}
       <button className="btn block" style={{ marginTop: 20 }} disabled={busy}>{busy ? 'Sending code…' : 'Create account'}</button>

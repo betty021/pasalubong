@@ -11,6 +11,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [show, setShow] = useState(false);   // ipakita/itago ang password
 
   async function submit(e) {
     e.preventDefault(); setError(''); setBusy(true);
@@ -32,7 +33,14 @@ export default function Login() {
       <span className="muted">Log in to your PasalubongHub account.</span>
       {state?.verified && <div className="ok-note" role="status"><i className="fa-solid fa-circle-check" aria-hidden="true" /> Email verified! Please log in to continue.</div>}
       <div className="field"><label>Email</label><input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" autoFocus={!email} /></div>
-      <div className="field"><label>Password</label><input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" autoFocus={!!email} /></div>
+      <div className="field"><label>Password</label>
+        <div style={{ position: 'relative' }}>
+          <input type={show ? 'text' : 'password'} required value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" autoFocus={!!email} style={{ paddingRight: 44 }} />
+          <button type="button" onClick={() => setShow((s) => !s)} aria-label={show ? 'Hide password' : 'Show password'} title={show ? 'Hide password' : 'Show password'}
+            style={{ position: 'absolute', right: 6, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 0, cursor: 'pointer', padding: '6px 8px', color: 'inherit' }}>
+            <i className={`fa-solid ${show ? 'fa-eye-slash' : 'fa-eye'}`} aria-hidden="true" /></button>
+        </div>
+      </div>
       {error && <div className="err" role="alert">{error}</div>}
       <button className="btn block" style={{ marginTop: 20 }} disabled={busy}>{busy ? 'Logging in…' : 'Log in'}</button>
       <p className="alt">New here? <Link to="/register">Create an account</Link></p>
