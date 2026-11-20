@@ -13,6 +13,7 @@ const SELECT = `SELECT id, name, tagline, about, address, phone, lat::float8 AS 
 
 // Public: impormasyon ng tindahan (para sa home page)
 r.get('/', wrap(async (_req, res) => {
+  res.set('Cache-Control', 'no-cache');   // laging kunin ang pinakabagong cover photos
   res.json((await query(SELECT)).rows[0]);
 }));
 

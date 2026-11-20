@@ -2,7 +2,7 @@
 //  - Offline: app shell + products/categories/store/images (stale-while-revalidate). HINDI naka-cache: login, orders, chat, admin.
 //  - Background sync: nire-replay ang mga aksyong naka-queue habang offline (tingnan ang src/offlineQueue.js).
 //  - Push notifications.
-const V = 'v1';
+const V = 'v2';
 const SHELL = `ph-shell-${V}`;
 const ASSETS = `ph-assets-${V}`;
 const DATA = `ph-data-${V}`;
@@ -42,6 +42,22 @@ self.addEventListener('fetch', (e) => {
       const res = await fetch(req);
       if (res.ok) c.put(req, res.clone());
       return res;
+    }));
+    return;
+  }
+
+  // Impormasyon ng tindahan (cover photos, logo): network muna para agad makita ang pagbabago ng admin; cache lang kapag offline
+  if (url.pathname === '/api/store' && !req.headers.get('X-No-Cache')) {
+    e.respondWith(caches.open(DATA).then(async (c) => {
+      try {
+        const res = await fetch(req);
+        if (res.ok) c.put(req, res.clone());
+        return res;
+      } catch {
+        const hit = await c.match(req);
+        if (hit) return hit;
+        throw new Error('offline');
+      }
     }));
     return;
   }

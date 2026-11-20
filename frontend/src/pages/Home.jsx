@@ -12,9 +12,8 @@ export default function Home() {
     api('/products').then(setProducts).catch(() => {});
   }, []);
 
-  // 3 cover photo ng admin: arch + 2 polaroid. Kung wala pang 2nd/3rd, larawan ng produkto muna ang ipapalit.
-  const prodPics = products.filter((p) => p.image_url).map((p) => p.image_url);
-  const polaroid = [store?.cover2_url || prodPics[0], store?.cover3_url || prodPics[1]];
+  // 3 cover photo ng admin: arch (Photo 1) + 2 polaroid (Photo 2 at 3). Cover photos lang ang ipinapakita, hindi larawan ng produkto.
+  const polaroid = [store?.cover2_url, store?.cover3_url];
 
   return (
     <>
