@@ -1,0 +1,8 @@
+.progress { list-style: none; display: flex; gap: 6px; margin: 4px 0; padding: 0; flex-wrap: wrap; }
+.progress li { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: .85rem; font-weight: 600; margin-right: 10px; }
+.progress .dot { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--line); display: inline-grid; place-items: center; font-size: .75rem; }
+.progress .done { color: var(--brand); }
+.progress .done .dot { background: var(--brand); border-color: var(--brand); color: #fff; }
+.progress .now { color: var(--ink); }
+.progress .now .dot { border-color: var(--brand); color: var(--brand); }
+@media (max-width: 600px) { .progress { gap: 4px; } .progress li { margin-right: 6px; font-size: .78rem; } }
