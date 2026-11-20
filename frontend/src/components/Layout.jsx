@@ -29,6 +29,8 @@ function SiteShell() {
   // Kapag pinindot ang Log in/Register habang naka-login, awtomatiko siyang dadalhin sa sarili niyang pahina.
   const landing = pathname === '/';
   const guest = !user || landing;
+  // Sa login/register/verify na pahina, walang nav links (logo at Online status lang)
+  const authPage = ['/login', '/register', '/verify-email'].includes(pathname);
 
   return (
     <>
@@ -40,9 +42,9 @@ function SiteShell() {
           </Link>
           <ConnectionStatus />
           <nav className="nav">
-            <InstallButton />
+            {!authPage && <InstallButton />}
             {/* Bisita: About, Features, Products lang (mga seksyon ng landing page) */}
-            {guest && <>
+            {guest && !authPage && <>
               <Link to="/#about">About</Link>
               <Link to="/#features">Features</Link>
               <Link to="/#products">Products</Link>
@@ -63,7 +65,7 @@ function SiteShell() {
               <NavLink to="/admin"><i className="fa-solid fa-chart-line" aria-hidden="true" /><span className="hide-sm">Dashboard</span></NavLink>
               <AccountMenu placement="down" />
             </>}
-            {guest && <Link to="/login" className="btn sm">Log in</Link>}
+            {guest && !authPage && <Link to="/login" className="btn sm">Log in</Link>}
           </nav>
         </div>
       </header>
