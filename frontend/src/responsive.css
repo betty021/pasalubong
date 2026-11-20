@@ -6,6 +6,9 @@ body { overflow-x: hidden; min-width: 320px; }
 img, video, svg { max-width: 100%; }
 .layout > *, .hero .wrap > *, .grid > *, .two > * { min-width: 0; }
 .box, .line .info, .row-between > div { overflow-wrap: anywhere; }
+.sum { gap: 12px; }
+.sum > span:first-child { min-width: 0; overflow-wrap: anywhere; }
+.sum > span:last-child { white-space: nowrap; }
 .header { padding-top: env(safe-area-inset-top, 0px); }
 .admin-top { padding-top: env(safe-area-inset-top, 0px); height: auto; min-height: 68px; }
 .side { padding-top: calc(18px + env(safe-area-inset-top, 0px)); padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
@@ -34,10 +37,12 @@ img, video, svg { max-width: 100%; }
 }
 
 /* ---------- Tablet ---------- */
-@media (max-width: 1024px) {
-  .layout { grid-template-columns: 1fr 320px; }
+@media (min-width: 881px) and (max-width: 1024px) {
+  .layout { grid-template-columns: minmax(0, 1fr) 320px; }
 }
 @media (max-width: 880px) {
+  /* Cart / Checkout: isang column sa phone at maliit na tablet */
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .wrap { width: min(1180px, 100% - 32px); }
   .chat { height: min(640px, calc(100dvh - 190px)); }
   .page { padding: 28px 0 56px; }
@@ -84,10 +89,21 @@ img, video, svg { max-width: 100%; }
   .card .body { padding: 12px; }
   .card h3 { font-size: .98rem; }
   .card .row { flex-wrap: wrap; }
-  /* Cart: mag-wrap ang mga hanay */
-  .line { flex-wrap: wrap; gap: 10px 12px; }
-  .line .info { flex: 1 1 calc(100% - 90px); }
-  .line > b { min-width: 0 !important; margin-left: auto; }
+  /* Cart: bawat produkto = larawan | pangalan | alisin, tapos dami | presyo */
+  .line {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) auto;
+    grid-template-areas: "thumb info remove" "thumb qty price";
+    gap: 8px 12px;
+    align-items: center;
+  }
+  .line .thumb { grid-area: thumb; width: 64px; height: 64px; align-self: start; }
+  .line .info { grid-area: info; min-width: 0; }
+  .line > .qty { grid-area: qty; justify-self: start; }
+  .line > b { grid-area: price; justify-self: end; min-width: 0 !important; text-align: right !important; }
+  .line > button { grid-area: remove; justify-self: end; align-self: start; }
+  /* Checkout: mas maluwag ang mga pindutan */
+  .layout aside .btn.block { padding: 14px 22px; }
   .panel { padding: 26px 18px; }
   .modal { padding: 24px 20px 20px; }
   .modal-actions { flex-direction: column-reverse; }
